@@ -14,12 +14,12 @@ class Intersection:
         self.q4Peds = list()
         self.scrambleEnable = True
         self.scramble = False
-        self.q1toq2 = True
-        self.q2toq3 = True
-        self.q3toq4 = True
-        self.q4toq1 = True
-        self.q1toq3 = True
-        self.q4toq2 = True
+        self.q1toq2 = False
+        self.q2toq3 = False
+        self.q3toq4 = False
+        self.q4toq1 = False
+        self.q1toq3 = False
+        self.q4toq2 = False
         self.pedSignal1 = False
         self.pedSignal2 = False
         self.pedSignal3 = False
@@ -30,6 +30,17 @@ class Intersection:
         self.auditorySignal4 = "Wait"
         self.lastSwitch = time()
         self.screen = screen 
+
+    def update(self, pedList):
+        for pedestrian in pedList: 
+            if(pedestrian.start == 1): 
+                self.q1Peds.append(pedestrian)
+            if(pedestrian.start == 2): 
+                self.q1Peds.append(pedestrian)
+            if(pedestrian.start == 3): 
+                self.q1Peds.append(pedestrian)
+            if(pedestrian.start == 4): 
+                self.q1Peds.append(pedestrian)
 
     def draw(self): 
         pygame.draw.rect(self.screen, (255, 255, 255), pygame.Rect(175, 550, 200, 100), 1)
@@ -119,9 +130,8 @@ class Intersection:
         
 
     def eval(self): 
-        
-        temp = [len(self.q1Peds), len(self.q2peds), len(self.q3Peds), len(self.q4Peds)]
-        if(((len(self.q1Peds), len(self.q2peds), len(self.q3Peds), len(self.q4Peds))> COUNTTHRESHOLD) or ((time() - self.lastSwitch) > TIMETHRESHOLD)): 
+        temp = [len(self.q1Peds), len(self.q2Peds), len(self.q3Peds), len(self.q4Peds)]
+        if(((len(self.q1Peds) + len(self.q2Peds) +  len(self.q3Peds) +  len(self.q4Peds))> COUNTTHRESHOLD) or ((time() - self.lastSwitch) > TIMETHRESHOLD)): 
             thresh = max(temp)/2
             if((len(self.q1Peds) >= thresh) and (len(self.q2Peds)>= thresh) and (len(self.q3Peds)>= thresh) and (len(self.q4Peds)>= thresh)): 
                 self.scramble = True
@@ -166,16 +176,17 @@ class Intersection:
                         q3toq4 += 1
                 testList = [q1toq2, q2toq3, q3toq4, q4toq1, q1toq3, q4toq2]
                 maximum = testList.index(max(testList))
+                print(maximum)
                 if(maximum == 0): 
-                    q1toq2 = True
+                    self.q1toq2 = True
                 elif(maximum == 1): 
-                    q2toq3 = True
+                    self.q2toq3 = True
                 elif(maximum == 2): 
-                    q3toq4 = True
+                    self.q3toq4 = True
                 elif(maximum == 3): 
-                    q4toq1 = True
+                    self.q4toq1 = True
                 elif(maximum == 4): 
-                    q1toq3 = True
+                    self.q1toq3 = True
                 else: 
-                    q4toq2 = True
+                    self.q4toq2 = True
 

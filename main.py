@@ -33,12 +33,14 @@ class Simulation:
                 if(self.spawnElig): 
                     if(keys[pygame.K_SPACE]): 
                         self.pedestrianList.append(Pedestrian())
+                        self.intersection.update(self.pedestrianList)
                         self.spawnElig = False
                         #print(self.pedestrianList[len(self.pedestrianList) -1].start)
                 else: 
                     if(not keys[pygame.K_SPACE]): 
                         self.spawnElig = True
 
+                self.intersection.eval()
                 for pedestrian in self.pedestrianList: 
                     if(pedestrian.start == 1): 
                         pygame.draw.circle(self.screen, (0,0,255), (300, 150), 15)
