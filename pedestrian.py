@@ -13,8 +13,8 @@ possible directions:
 
 class Pedestrian: 
     def __init__(self): 
-        temp = str(randint(1, 4))
-        temp2 = str(randint(1, 4))
+        temp = randint(1, 4)
+        temp2 = randint(1, 4)
         self.start = temp
         self.end = temp2
         self.rulebreaker = randint(0, 1)

@@ -118,25 +118,64 @@ class Intersection:
 
         
 
-    def update(self, q1=None, q2=None, q3=None, q4=None): 
-        if(q1):
-            self.q1Count += 1
-        if(q2): 
-            self.q2Count += 1
-        if(q3): 
-            self.q3Count += 1
-        if(q4): 
-            self.q4Count += 1
-    
     def eval(self): 
-        temp = [self.q1Count, self.q2Count, self.q3Count, self.q4Count]
-        if(((self.q1Count + self.q2Count + self.q3Count + self.q4Count) > COUNTTHRESHOLD) or ((time() - self.lastSwitch) > TIMETHRESHOLD)): 
+        
+        temp = [len(self.q1Peds), len(self.q2peds), len(self.q3Peds), len(self.q4Peds)]
+        if(((len(self.q1Peds), len(self.q2peds), len(self.q3Peds), len(self.q4Peds))> COUNTTHRESHOLD) or ((time() - self.lastSwitch) > TIMETHRESHOLD)): 
             thresh = max(temp)/2
-            if((self.q1Count >= thresh) and (self.q2Count >= thresh) and (self.q3Count >= thresh) and (self.q4Count >= thresh)): 
+            if((len(self.q1Peds) >= thresh) and (len(self.q2Peds)>= thresh) and (len(self.q3Peds)>= thresh) and (len(self.q4Peds)>= thresh)): 
                 self.scramble = True
             else: 
-                return
-                    
+                q1toq2 = 0
+                q2toq3 = 0
+                q3toq4 = 0
+                q4toq1 = 0
+                q1toq3 = 0
+                q4toq2 = 0
 
+                for pedestrian in self.q1Peds: 
+                    if(pedestrian.end == 2): 
+                        q1toq2 += 1
+                    elif(pedestrian.end == 3): 
+                        q1toq3 += 1
+                    else: 
+                        q4toq1 += 1
 
+                for pedestrian in self.q2Peds: 
+                    if(pedestrian.end == 1): 
+                        q1toq2 += 1
+                    elif(pedestrian.end == 3): 
+                        q2toq3 += 1
+                    else: 
+                        q4toq2 += 1
+
+                for pedestrian in self.q3Peds: 
+                    if(pedestrian.end == 4): 
+                        q3toq4 += 1
+                    elif(pedestrian.end == 2): 
+                        q4toq2 += 1
+                    else: 
+                        q1toq2 += 1
+
+                for pedestrian in self.q4Peds: 
+                    if(pedestrian.end == 1): 
+                        q4toq1 += 1
+                    elif(pedestrian.end == 2): 
+                        q4toq2 += 1
+                    else: 
+                        q3toq4 += 1
+                testList = [q1toq2, q2toq3, q3toq4, q4toq1, q1toq3, q4toq2]
+                maximum = testList.index(max(testList))
+                if(maximum == 0): 
+                    q1toq2 = True
+                elif(maximum == 1): 
+                    q2toq3 = True
+                elif(maximum == 2): 
+                    q3toq4 = True
+                elif(maximum == 3): 
+                    q4toq1 = True
+                elif(maximum == 4): 
+                    q1toq3 = True
+                else: 
+                    q4toq2 = True
 
