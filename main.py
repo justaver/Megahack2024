@@ -1,39 +1,39 @@
+from pedestrian import Pedestrian
+from intersection import Intersection
+import pygame
 
 
-class Intersection: 
 
+class Simulation: 
     def __init__(self): 
-        self.q1Count = 0
-        self.q2Count = 0
-        self.q3Count = 0
-        self.q4Count = 0
-        self.scramble = True
-        self.q1toq2 = False
-        self.q2toq3 = False
-        self.q3toq4 = False
-        self.q4toq1 = False
-
-    def draw(self): 
-        #draw based on active crosswalks
-        return
-
-    def update(self, q1=None, q2=None, q3=None, q4=None): 
-        if(q1):
-            self.q1Count += 1
-        if(q2): 
-            self.q2Count += 1
-        if(q3): 
-            self.q3Count += 1
-        if(q4): 
-            self.q4Count += 1
-    
-    def eval(self): 
-        if((self.q1Count + self.q2Count + self.q3Count + self.q4Count) > THRESHOLD): 
-            
-
-            
-            
-
+        self.FPS = 1
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode((1920, 1080))
+        self.pedestrianList = list()
+        pygame.event.set_allowed([
+            pygame.QUIT, 
+            pygame.KEYDOWN
+        ])
+        self.intersection = Intersection(self.screen)
         
+    def loop(self):  
+        self.screen.fill("black")
+        while True: 
+            keys = pygame.key.get_pressed()
+            for event in pygame.event.get(): 
+                if(event.type == pygame.QUIT): 
+                    return
+                if(keys[pygame.K_SPACE]): 
+                    self.pedestrianList.append(Pedestrian())
+                    print(self.pedestrianList)
+            self.intersection.draw()
+            pygame.display.flip()
+            pygame.display.update()
+            self.clock.tick(self.FPS)
+       
 
+if __name__ == "__main__": 
+    simulation = Simulation()
+    simulation.loop()
 
